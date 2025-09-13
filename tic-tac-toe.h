@@ -1,29 +1,31 @@
 #ifndef TIC_TAC_TOE_H
 #define TIC_TAC_TOE_H
-#include <vector>
 
-enum class Cell { Empty, X, O };
-enum class GameResult { InProgress, X_Wins, O_Wins, Draw };
+#include "game.h"
 
-char toChar(Cell c) {
-    switch(c) {
-        case Cell::Empty: return '.';
-        case Cell::X: return 'X';
-        case Cell::O: return 'O';
-    }
-    return '?';
-}
-
-
-class TicTacToe {
+class TicTacToe : public Game {
 public:
-    void startGame();
+    TicTacToe();
+    void startGame() override;
+    void printBoard() const override;
+    bool makeMove(int col) override; // col is ignored for TicTacToe
+    GameResult checkResult() override;
+
 private:
     std::vector<std::vector<Cell>> board;
     Cell currentPlayer;
-    void printBoard();
-    bool makeMove(int row, int col);
-    GameResult checkGameResult();
+    GameResult res;
+    bool isFull() const;
+    void switchPlayer();
 };
 
 #endif //TIC_TAC_TOE_H
+
+/*
+ * std::vector<std::vector<Cell>> board; -- is a dynamic 2D array
+ * I understood that doing just one vector would give us just
+ * a dynamic 1D array. You can see it as rows of cells.
+ *
+ * Also much easier memory management to use vectors instead of arrays
+ * as that would require the manual new/delete
+ */
